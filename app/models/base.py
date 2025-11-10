@@ -8,7 +8,7 @@ de la aplicación BolsaV1.
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 # Configuración de la base de datos
 DATABASE_URL = os.getenv(
@@ -21,7 +21,8 @@ Base = declarative_base()
 
 # Engine y sesión
 engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(bind=engine)
+_session_factory = sessionmaker(bind=engine)
+SessionLocal = scoped_session(_session_factory)
 
 # Función para obtener sesión de base de datos
 def get_db():
@@ -31,3 +32,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
+def remove_db_session():
+    """Cierra y elimina la sesión de la base de datos del hilo actual."""
+    SessionLocal.remove()
