@@ -1,6 +1,6 @@
 # ============================================================================
 # DEPENDENCIAS DEL PROYECTO
-# Sistema de Gestión de Valores Cotizados
+# Sistema de Gestión de Valores Cotizados - FASE 3 con Autenticación
 # ============================================================================
 
 # Framework Web y UI
@@ -17,6 +17,11 @@ yfinance==0.2.35
 # Procesamiento de Datos
 pandas==2.2.0
 numpy==1.26.3
+
+# Seguridad y Autenticación (FASE 3)
+passlib[bcrypt]==1.7.4
+PyJWT==2.8.0
+cryptography==41.0.7
 
 # Utilidades
 python-dotenv==1.0.0

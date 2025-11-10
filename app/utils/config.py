@@ -39,9 +39,21 @@ class Config:
     INITIAL_SIDEBAR_STATE: str = "expanded"
     
     # Aplicación
-    APP_VERSION: str = "2.0.0"
+    APP_VERSION: str = "3.0.0"
     APP_NAME: str = "BolsaV1"
     APP_DESCRIPTION: str = "Sistema Integral de Gestión de Activos Financieros"
+    
+    # Seguridad y Autenticación (FASE 3)
+    SECRET_KEY: str = os.getenv(
+        "SECRET_KEY", 
+        "default-dev-key-change-in-production-bolsav1-2024-security"
+    )
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "1440"))  # 24 horas
+    JWT_ALGORITHM: str = "HS256"
+    SESSION_EXPIRE_HOURS: int = int(os.getenv("SESSION_EXPIRE_HOURS", "24"))
+    PASSWORD_MIN_LENGTH: int = int(os.getenv("PASSWORD_MIN_LENGTH", "8"))
+    MAX_LOGIN_ATTEMPTS: int = int(os.getenv("MAX_LOGIN_ATTEMPTS", "5"))
+    LOGIN_ATTEMPT_WINDOW_MINUTES: int = int(os.getenv("LOGIN_ATTEMPT_WINDOW_MINUTES", "15"))
     
     @classmethod
     def get_streamlit_config(cls) -> Dict[str, Any]:
@@ -69,12 +81,35 @@ class Config:
     
     @classmethod
     def get_yahoo_config(cls) -> Dict[str, Any]:
-        """Retorna configuración de Yahoo Finance"""
+        """Retorna configuración para Yahoo Finance"""
         return {
-            "delay_min": cls.REQUEST_DELAY_MIN,
-            "delay_max": cls.REQUEST_DELAY_MAX,
+            "request_delay_min": cls.REQUEST_DELAY_MIN,
+            "request_delay_max": cls.REQUEST_DELAY_MAX,
             "timeout": cls.YAHOO_TIMEOUT
         }
+    
+    @classmethod
+    def get_security_config(cls) -> Dict[str, Any]:
+        """Retorna configuración de seguridad"""
+        return {
+            "secret_key": cls.SECRET_KEY,
+            "access_token_expire_minutes": cls.ACCESS_TOKEN_EXPIRE_MINUTES,
+            "jwt_algorithm": cls.JWT_ALGORITHM,
+            "session_expire_hours": cls.SESSION_EXPIRE_HOURS,
+            "password_min_length": cls.PASSWORD_MIN_LENGTH,
+            "max_login_attempts": cls.MAX_LOGIN_ATTEMPTS,
+            "login_attempt_window_minutes": cls.LOGIN_ATTEMPT_WINDOW_MINUTES
+        }
+    
+    @classmethod
+    def get_secret_key(cls) -> str:
+        """Retorna la clave secreta para JWT"""
+        return cls.SECRET_KEY
+    
+    @classmethod
+    def is_production(cls) -> bool:
+        """Determina si estamos en entorno de producción"""
+        return cls.LOG_LEVEL == "INFO"
     
     @classmethod
     def get_logging_config(cls) -> Dict[str, Any]:

@@ -21,5 +21,9 @@ class Operacao(Base):
     quantidade = Column(Integer, nullable=False)
     preco = Column(Numeric(12, 4), nullable=False)
     
+    # Multi-tenancy: Cada operación pertenece a un usuario
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    
     # Relaciones
+    user = relationship("User", back_populates="operacoes")
     ativo = relationship("Ativo", back_populates="operacoes")
