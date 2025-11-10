@@ -45,18 +45,26 @@ class StreamlitAuth:
         
         session_id = st.session_state.get(StreamlitAuth.SESSION_KEY)
         if not session_id:
+            # Para debugging, temporalmente devolver False siempre
+            logger.info("No hay session_id, usuario no autenticado")
             return False
         
-        # Validar sesión con la base de datos
-        is_valid, user = AuthService.validate_session(session_id)
-        
-        if is_valid and user:
-            # Actualizar usuario en session state
-            st.session_state[StreamlitAuth.USER_KEY] = user.to_dict()
-            return True
-        else:
-            # Limpiar sesión inválida
-            StreamlitAuth.logout()
+        try:
+            # Validar sesión con la base de datos
+            is_valid, user = AuthService.validate_session(session_id)
+            
+            if is_valid and user:
+                # Actualizar usuario en session state
+                st.session_state[StreamlitAuth.USER_KEY] = user.to_dict()
+                logger.info(f"Usuario autenticado: {user.username}")
+                return True
+            else:
+                # Limpiar sesión inválida
+                logger.warning("Sesión inválida, limpiando")
+                StreamlitAuth.logout()
+                return False
+        except Exception as e:
+            logger.error(f"Error validando sesión: {e}")
             return False
     
     @staticmethod
@@ -126,6 +134,18 @@ class StreamlitAuth:
             return True, message
         else:
             return False, message
+    
+    @staticmethod
+    def set_session_data(session_data: Dict[str, Any]):
+        """
+        Establece los datos de sesión en Streamlit
+        
+        Args:
+            session_data: Datos de sesión del AuthService
+        """
+        st.session_state[StreamlitAuth.SESSION_KEY] = session_data["session_id"]
+        st.session_state[StreamlitAuth.USER_KEY] = session_data["user"]
+        logger.info(f"Sesión establecida para usuario: {session_data['user']['username']}")
     
     @staticmethod
     def logout():

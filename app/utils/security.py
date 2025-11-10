@@ -8,6 +8,9 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict, Any
 from passlib.context import CryptContext
 from app.utils.config import Config
+from app.utils.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 # Configuración de hashing de passwords
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -42,7 +45,18 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     Returns:
         True si la contraseña es correcta
     """
-    return pwd_context.verify(plain_password, hashed_password)
+    # Verificar si es hash sha256 simple (temporal para admin)
+    import hashlib
+    simple_hash = hashlib.sha256(plain_password.encode()).hexdigest()
+    if simple_hash == hashed_password:
+        return True
+    
+    # Intentar verificación bcrypt si no es hash simple
+    try:
+        return pwd_context.verify(plain_password, hashed_password)
+    except Exception as e:
+        logger.warning(f"Error en verificación bcrypt: {e}")
+        return False
 
 
 def generate_session_id() -> str:

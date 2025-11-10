@@ -145,7 +145,7 @@ def show_sidebar():
     # Estadísticas rápidas del usuario
     try:
         from app.services.user_service import UserService
-        user_stats = UserService.get_user_statistics(user['id'])
+        user_stats = UserService.get_user_statistics()
         
         st.sidebar.metric("📊 Activos", user_stats.get('total_activos', 0))
         st.sidebar.metric("💼 Operaciones", user_stats.get('total_operaciones', 0))
@@ -318,9 +318,29 @@ def main():
         return
     
     # Inicializar sistema de autenticación
-    StreamlitAuth.initialize()
+    StreamlitAuth.initialize_session()
     
-    # Mostrar header
+    # Por ahora, siempre mostrar login para debugging
+    logger = get_logger('main')
+    logger.info("Iniciando aplicación - verificando autenticación")
+    
+    # Verificar si el usuario está autenticado
+    is_auth = StreamlitAuth.is_authenticated()
+    logger.info(f"Estado de autenticación: {is_auth}")
+    
+    if not is_auth:
+        # Mostrar página de login/registro
+        logger.info("Mostrando página de login")
+        if st.session_state.get("show_register", False):
+            logger.info("Mostrando página de registro")
+            show_register_page()
+        else:
+            logger.info("Mostrando página de login")
+            show_login_page()
+        return
+    
+    # Usuario autenticado - mostrar aplicación principal
+    logger.info("Usuario autenticado, mostrando aplicación principal")
     show_header()
     
     # Configurar sidebar y obtener selección de menú

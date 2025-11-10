@@ -150,18 +150,6 @@ class PosicaoService:
             return False
         finally:
             session.close()
-            
-            session.commit()
-            logger.info(f"Posição atualizada com sucesso para {ativo.ticker}: resultado_acumulado={resultado_acumulado:.2f}")
-            return True
-            
-        except Exception as e:
-            session.rollback()
-            logger.error(f"Erro ao atualizar posição do ativo {ativo_id}: {e}", exc_info=True)
-            st.error(f"❌ Error al actualizar posición: {e}")
-            return False
-        finally:
-            session.close()
     
     @staticmethod
     def listar_posicoes(user_id: int = None) -> List[Posicao]:

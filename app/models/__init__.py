@@ -25,6 +25,3 @@ __all__ = [
     'Operacao',
     'Posicao'
 ]
-    'Operacao',
-    'Posicao'
-]

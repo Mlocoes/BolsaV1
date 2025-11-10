@@ -14,7 +14,7 @@ class Config:
     # Base de datos
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL",
-        "postgresql://postgres:postgres@localhost:5432/stock_management"
+        "postgresql://bolsa_user:bolsa_password_2025@localhost:5432/stock_management"
     )
     
     # Cache de cotizaciones

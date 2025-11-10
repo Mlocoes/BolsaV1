@@ -140,11 +140,6 @@ class CotacaoService:
             return None
         finally:
             session.close()
-        except Exception as e:
-            logger.error(f"Erro ao obter última cotação da BD para {ticker}: {e}", exc_info=True)
-            return None
-        finally:
-            session.close()
     
     @staticmethod
     def obter_cotacao_atual(ticker: str) -> Optional[dict]:

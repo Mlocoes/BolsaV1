@@ -11,6 +11,7 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
+from sqlalchemy import text
 
 # Agregar el directorio raíz al path para imports
 sys.path.append(str(Path(__file__).parent))
@@ -82,7 +83,7 @@ def run_migration_sql():
                 if statement and not statement.startswith('--'):
                     try:
                         print(f"  📝 Ejecutando statement {i+1}/{len(statements)}")
-                        conn.execute(statement)
+                        conn.execute(text(statement))
                     except Exception as stmt_error:
                         # Algunos comandos pueden fallar si ya existen (IF NOT EXISTS)
                         if "already exists" not in str(stmt_error).lower():
@@ -103,7 +104,7 @@ def verify_migration():
         
         # Verificar que existe al menos un usuario admin
         with engine.connect() as conn:
-            result = conn.execute("SELECT COUNT(*) FROM users WHERE is_admin = TRUE")
+            result = conn.execute(text("SELECT COUNT(*) FROM users WHERE is_admin = TRUE"))
             admin_count = result.scalar()
             
             if admin_count > 0:
@@ -113,11 +114,11 @@ def verify_migration():
                 return False
             
             # Verificar índices creados
-            result = conn.execute("""
+            result = conn.execute(text("""
                 SELECT indexname FROM pg_indexes 
                 WHERE tablename IN ('users', 'user_sessions', 'ativos', 'operacoes', 'posicoes')
                 AND indexname LIKE 'idx_%'
-            """)
+            """))
             indices = result.fetchall()
             print(f"✅ {len(indices)} índices de multi-tenancy creados")
             
@@ -185,7 +186,7 @@ def main():
     # Verificar conexión a BD
     try:
         with engine.connect() as conn:
-            conn.execute("SELECT 1")
+            conn.execute(text("SELECT 1"))
         print("✅ Conexión a base de datos OK")
     except Exception as e:
         print(f"❌ Error conectando a BD: {e}")

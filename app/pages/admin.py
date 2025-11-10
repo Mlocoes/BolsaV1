@@ -302,7 +302,7 @@ def show_users_table():
             
             with col3:
                 # Estadísticas del usuario
-                user_stats = UserService.get_user_statistics(user['id'])
+                user_stats = UserService.get_user_statistics()
                 st.text(f"Activos: {user_stats.get('total_activos', 0)}")
                 st.text(f"Operaciones: {user_stats.get('total_operaciones', 0)}")
             
