@@ -1,0 +1,38 @@
+# ============================================================================
+# DEPENDENCIAS DEL PROYECTO
+# Sistema de Gestión de Valores Cotizados
+# ============================================================================
+
+# Framework Web y UI
+streamlit==1.31.0
+plotly==5.18.0
+
+# Base de Datos
+sqlalchemy==2.0.25
+psycopg2-binary==2.9.9
+
+# APIs Financieras
+yfinance==0.2.35
+
+# Procesamiento de Datos
+pandas==2.2.0
+numpy==1.26.3
+
+# Utilidades
+python-dotenv==1.0.0
+requests==2.31.0
+
+# Fecha y Hora
+python-dateutil==2.8.2
+
+# Logging y Debugging (opcional)
+loguru==0.7.2
+
+# Testing (opcional)
+pytest==8.0.0
+pytest-cov==4.1.0
+
+# Formateo y Linting (opcional para desarrollo)
+black==24.1.1
+flake8==7.0.0
+isort==5.13.2

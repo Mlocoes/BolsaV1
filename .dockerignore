@@ -1,0 +1,80 @@
+# ============================================================================
+# DOCKER IGNORE - BolsaV1
+# Archivos excluidos del contexto de build de Docker  
+# ============================================================================
+
+# Entorno virtual local (no necesario en Docker)
+venv/
+env/
+.venv/
+
+# Archivos de logs locales
+logs/*
+!logs/.gitkeep
+
+# Archivos temporales de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+
+# Editor
+.vscode/
+.idea/
+
+# Documentación (solo necesaria para desarrollo)
+README.md
+README-DOCKER.md
+RELATORIO.md
+FASE1_IMPLEMENTADA.md
+*.md
+
+# Scripts de desarrollo
+test_fase1.sh
+
+# Archivos de backup (se generan en runtime)
+backups/*.sql
+
+# Archivos de export (se generan en runtime)
+exports/*
+
+# Configuración local (usamos .env.docker en su lugar)
+.env
+
+# Archivos de Docker Compose (no necesarios dentro del contenedor)
+docker-compose*.yml
+Dockerfile
+
+# Scripts que no se usan dentro del contenedor
+startup.sh
+
+# Archivos temporales
+*.tmp
+*.log
