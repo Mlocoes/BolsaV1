@@ -10,35 +10,15 @@ import streamlit as st
 from typing import List, Optional
 from ..models import SessionLocal, Ativo
 from .validacao_service import validar_ticker
-from ..utils.auth import StreamlitAuth
 from ..utils.logging_config import get_logger
+from .base_service import BaseService
 
 # Configurar logger
 logger = get_logger(__name__)
 
 
-class AtivoService:
+class AtivoService(BaseService):
     """Servicio para gestión de activos financieros con soporte multi-usuario"""
-    
-    @staticmethod
-    def _get_current_user_id() -> int:
-        """
-        Obtiene el ID del usuario actual autenticado
-        
-        Returns:
-            int: ID del usuario actual
-            
-        Raises:
-            Exception: Si no hay usuario autenticado
-        """
-        if not StreamlitAuth.is_authenticated():
-            raise Exception("Usuario no autenticado")
-        
-        user = StreamlitAuth.get_current_user()
-        if not user:
-            raise Exception("No se pudo obtener información del usuario")
-        
-        return user['id']
     
     @staticmethod
     def adicionar_ativo(ticker: str, nome: str = None) -> bool:
